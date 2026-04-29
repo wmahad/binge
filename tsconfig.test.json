@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.node.json",
+	"compilerOptions": {
+		"paths": {
+			"@src/*": ["./src/*"],
+			"@generated": ["./src/generated/index.ts"]
+		}
+	},
+	"include": ["test/**/*.ts"]
+}

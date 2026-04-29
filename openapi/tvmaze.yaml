@@ -1,0 +1,267 @@
+openapi: 3.0.3
+info:
+  title: TVMaze Public API (subset)
+  version: 1.0.0
+  description: |
+    Contract aligned with https://api.tvmaze.com responses for the endpoints used by binge.
+    HAL `_links` on show objects matches the API (self, previousepisode, nextepisode, …).
+
+servers:
+  - url: https://api.tvmaze.com
+
+paths:
+  /shows:
+    get:
+      operationId: getShows
+      summary: Show index (paginated, max 250 per page)
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number; returns 404 when past the last page.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: List of shows (primary information each)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Show"
+        "404":
+          description: No more pages (pagination past end of index)
+
+  /shows/{id}:
+    get:
+      operationId: getShowById
+      summary: Show main information
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Show
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Show"
+        "404":
+          description: Show not found
+
+  /search/shows:
+    get:
+      operationId: searchShows
+      summary: Search shows by name (fuzzy)
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: Search hits ordered by relevancy
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SearchShowResult"
+
+components:
+  schemas:
+    SearchShowResult:
+      type: object
+      required:
+        - score
+        - show
+      properties:
+        score:
+          type: number
+          description: Relevancy score (not normalized 0–1)
+        show:
+          $ref: "#/components/schemas/Show"
+
+    # HAL link target (see TVmaze embedding / HATEOAS docs)
+    HalLink:
+      type: object
+      properties:
+        href:
+          type: string
+          format: uri
+        name:
+          type: string
+          description: Present on some links (e.g. previousepisode)
+      additionalProperties: true
+
+    ShowLinks:
+      type: object
+      description: HAL-style links included on show resources in API JSON as `_links`
+      properties:
+        self:
+          $ref: "#/components/schemas/HalLink"
+        previousepisode:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/HalLink"
+        nextepisode:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/HalLink"
+      additionalProperties: true
+
+    Show:
+      type: object
+      required:
+        - id
+        - name
+        - genres
+        - rating
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+          format: uri
+        name:
+          type: string
+        type:
+          type: string
+          nullable: true
+        language:
+          type: string
+          nullable: true
+        genres:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          nullable: true
+        runtime:
+          type: integer
+          nullable: true
+        averageRuntime:
+          type: integer
+          nullable: true
+        premiered:
+          type: string
+          nullable: true
+          description: ISO 8601 date (YYYY-MM-DD)
+        ended:
+          type: string
+          nullable: true
+        officialSite:
+          type: string
+          nullable: true
+          format: uri
+        schedule:
+          $ref: "#/components/schemas/Schedule"
+        rating:
+          $ref: "#/components/schemas/Rating"
+        weight:
+          type: integer
+          nullable: true
+        network:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Network"
+        webChannel:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Network"
+        dvdCountry:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Country"
+        externals:
+          $ref: "#/components/schemas/Externals"
+        image:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Image"
+        summary:
+          type: string
+          nullable: true
+          description: HTML snippet from TVmaze
+        updated:
+          type: integer
+          nullable: true
+          description: Unix timestamp of last update
+        _links:
+          $ref: "#/components/schemas/ShowLinks"
+
+    Schedule:
+      type: object
+      properties:
+        time:
+          type: string
+          nullable: true
+        days:
+          type: array
+          items:
+            type: string
+
+    Rating:
+      type: object
+      properties:
+        average:
+          type: number
+          nullable: true
+
+    Network:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        country:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Country"
+        officialSite:
+          type: string
+          nullable: true
+          format: uri
+
+    Country:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        timezone:
+          type: string
+
+    Externals:
+      type: object
+      properties:
+        tvrage:
+          type: integer
+          nullable: true
+        thetvdb:
+          type: integer
+          nullable: true
+        imdb:
+          type: string
+          nullable: true
+
+    Image:
+      type: object
+      properties:
+        medium:
+          type: string
+          format: uri
+        original:
+          type: string
+          format: uri

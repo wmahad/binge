@@ -11,6 +11,9 @@ export default defineConfig({
 			"@pages": fileURLToPath(
 				new URL("./src/features/shows/pages", import.meta.url),
 			),
+			"@generated": fileURLToPath(
+				new URL("./src/generated/index.ts", import.meta.url),
+			),
 		},
 	},
 });
