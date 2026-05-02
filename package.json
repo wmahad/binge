@@ -17,14 +17,19 @@
 		"lint": "biome lint .",
 		"format": "biome format --write .",
 		"check": "biome check --write .",
+		"check:ci": "biome ci .",
 		"generate": "kubb generate",
 		"generate:openapi": "kubb validate -i \"$PWD/openapi/tvmaze.yaml\"",
 		"prepare": "lefthook install",
 		"typecheck": "vue-tsc -b --noEmit",
+		"install:ci": "pnpm install --frozen-lockfile",
+		"ci": "pnpm run check:ci && pnpm run typecheck && pnpm run test:ci && pnpm run build",
 		"test": "vitest run",
+		"test:ci": "vitest run --browser.headless",
 		"test:browser": "vitest run --browser.headless=false",
 		"test:watch": "vitest",
-		"test:install-browsers": "playwright install chromium"
+		"test:install-browsers": "playwright install chromium",
+		"test:install-browsers:ci": "playwright install chromium --with-deps"
 	},
 	"dependencies": {
 		"@tanstack/vue-query": "^5.74.9",
