@@ -2,6 +2,8 @@
 
 TV dashboard (Vue 3 + TypeScript) over the [TVMaze API](https://www.tvmaze.com/api): genre-grouped catalog, show detail, and search.
 
+**Live:** [binge app](https://binge-kappa.vercel.app/)
+
 ## Requirements
 
 | Prerequisite | Notes |
@@ -17,7 +19,7 @@ Dependency versions in this repo are **frozen in `pnpm-lock.yaml`**. The `packag
 
 ### Install pnpm
 
-**1. Corepack (recommended)**  
+**1. Corepack (recommended)**
 [Corepack](https://nodejs.org/api/corepack.html) comes with Node and aligns to the `packageManager` field.
 
 ```bash
