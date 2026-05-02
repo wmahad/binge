@@ -1,0 +1,33 @@
+/*
+ * First paint before the Vite bundle — mirrors dark/light defaults from src/styles/main.css
+ * (:root / .light semantic tokens for bg, fg, border). Keep oklch values in sync when tokens change.
+ *
+ * body/#app font stack matches main.css fallbacks until async Google Fonts apply Inter.
+ */
+html {
+	background-color: oklch(0.16 0.02 270);
+	color: oklch(0.97 0.01 90);
+}
+
+html.light {
+	background-color: oklch(0.985 0.005 90);
+	color: oklch(0.18 0.02 270);
+}
+
+html *,
+html *::before,
+html *::after {
+	border-color: oklch(0.3 0.025 270);
+}
+
+html.light *,
+html.light *::before,
+html.light *::after {
+	border-color: oklch(0.88 0.01 90);
+}
+
+body,
+#app {
+	font-family:
+		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}

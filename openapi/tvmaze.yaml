@@ -12,6 +12,8 @@ servers:
 paths:
   /shows:
     get:
+      tags:
+        - TVMaze
       operationId: getShows
       summary: Show index (paginated, max 250 per page)
       parameters:
@@ -37,6 +39,8 @@ paths:
 
   /shows/{id}:
     get:
+      tags:
+        - TVMaze
       operationId: getShowById
       summary: Show main information
       parameters:
@@ -57,6 +61,8 @@ paths:
 
   /search/shows:
     get:
+      tags:
+        - TVMaze
       operationId: searchShows
       summary: Search shows by name (fuzzy)
       parameters:
@@ -75,6 +81,102 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/SearchShowResult"
+
+  /shows/{id}/cast:
+    get:
+      tags:
+        - TVMaze
+      operationId: getShowCast
+      summary: Cast for a show
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cast list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CastMember"
+
+  /shows/{id}/crew:
+    get:
+      tags:
+        - TVMaze
+      operationId: getShowCrew
+      summary: Crew for a show
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Crew list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrewMember"
+
+  /shows/{id}/seasons:
+    get:
+      tags:
+        - TVMaze
+      operationId: getShowSeasons
+      summary: Seasons for a show
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Seasons list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Season"
+
+  /people/{id}/castcredits:
+    get:
+      tags:
+        - TVMaze
+      operationId: getPersonCastcredits
+      summary: Person cast credits (optionally embed show)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: embed
+          in: query
+          required: false
+          description: Pass `show` to embed full show objects (TVMaze `_embedded.show`)
+          schema:
+            type: string
+            enum:
+              - show
+      responses:
+        "200":
+          description: Cast credits (with embedded shows when embed=show)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PersonCastCredit"
 
 components:
   schemas:
@@ -265,3 +367,90 @@ components:
         original:
           type: string
           format: uri
+
+    CharacterRef:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    PersonWithImage:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        image:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Image"
+
+    CastMember:
+      type: object
+      required:
+        - person
+        - character
+      properties:
+        person:
+          $ref: "#/components/schemas/PersonWithImage"
+        character:
+          $ref: "#/components/schemas/CharacterRef"
+
+    CrewMember:
+      type: object
+      required:
+        - type
+        - person
+      properties:
+        type:
+          type: string
+        person:
+          $ref: "#/components/schemas/PersonWithImage"
+
+    Season:
+      type: object
+      required:
+        - id
+        - number
+      properties:
+        id:
+          type: integer
+        number:
+          type: integer
+        episodeOrder:
+          type: integer
+          nullable: true
+        premiereDate:
+          type: string
+          nullable: true
+          description: ISO 8601 date (YYYY-MM-DD)
+        endDate:
+          type: string
+          nullable: true
+        image:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Image"
+        summary:
+          type: string
+          nullable: true
+
+    PersonCastCredit:
+      type: object
+      description: Entry from /people/{id}/castcredits; with embed=show includes nested show
+      properties:
+        _embedded:
+          type: object
+          nullable: true
+          properties:
+            show:
+              $ref: "#/components/schemas/Show"

@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { VueQueryDevtools } from "@tanstack/vue-query-devtools";
+import { AppHeader } from "@src/components";
 import { RouterView } from "vue-router";
-
-const isDev = import.meta.env.DEV;
 </script>
 
 <template>
-	<div class="flex min-h-dvh flex-col bg-zinc-950 text-zinc-100 antialiased">
-		<main id="main" class="flex-1">
+	<div class="flex min-h-dvh flex-col bg-background text-foreground antialiased">
+		<AppHeader />
+		<main id="main" class="flex-1 min-h-0">
 			<RouterView />
 		</main>
-		<VueQueryDevtools v-if="isDev" />
 	</div>
 </template>

@@ -1,19 +1,23 @@
-import { fileURLToPath, URL } from "node:url";
-import tailwindcss from "@tailwindcss/vite";
-import vue from "@vitejs/plugin-vue";
-import { defineConfig } from "vite";
+import { defineConfig, mergeConfig } from "vite";
+import { viteShared } from "./vite.shared";
 
-export default defineConfig({
-	plugins: [vue(), tailwindcss()],
-	resolve: {
-		alias: {
-			"@src": fileURLToPath(new URL("./src", import.meta.url)),
-			"@pages": fileURLToPath(
-				new URL("./src/features/shows/pages", import.meta.url),
-			),
-			"@generated": fileURLToPath(
-				new URL("./src/generated/index.ts", import.meta.url),
-			),
+export default mergeConfig(
+	viteShared(),
+	defineConfig({
+		build: {
+			rollupOptions: {
+				output: {
+					manualChunks(id) {
+						if (!id.includes("node_modules")) return;
+						if (id.includes("lucide-vue-next")) return "lucide";
+						if (id.includes("@tanstack")) return "tanstack";
+						if (id.includes("vue-router")) return "vue-router";
+						if (id.includes("@vue/") || id.includes("/vue/dist/")) {
+							return "vue";
+						}
+					},
+				},
+			},
 		},
-	},
-});
+	}),
+);

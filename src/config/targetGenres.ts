@@ -1,14 +1,17 @@
 export const TARGET_GENRES = [
 	"Drama",
 	"Comedy",
-	"Science-Fiction",
-	"Romance",
-	"Thriller",
-	"Crime",
-	"Animation",
-	"Documentary",
-	"Horror",
 	"Action",
+	"Crime",
+	"Science-Fiction",
+	"Thriller",
+	"Romance",
+	"Fantasy",
+	"Horror",
+	"Mystery",
+	"Family",
+	"Adventure",
+	"Sports",
 ] as const;
 
 export type TargetGenre = (typeof TARGET_GENRES)[number];

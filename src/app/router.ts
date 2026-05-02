@@ -6,23 +6,23 @@ export const router = createRouter({
 		{
 			path: "/",
 			name: "dashboard",
-			component: () => import("@pages/dashboard/index.vue"),
+			component: () => import("@src/features/shows/dashboard/page.vue"),
 		},
 		{
 			path: "/search",
 			name: "search",
-			component: () => import("@pages/search/index.vue"),
+			component: () => import("@src/features/shows/search/page.vue"),
 		},
 		{
 			path: "/shows/:id",
 			name: "show-details",
-			component: () => import("@pages/show/index.vue"),
+			component: () => import("@src/features/shows/detail/page.vue"),
 			props: true,
 		},
 		{
 			path: "/genres/:genre",
 			name: "genre-detail",
-			component: () => import("@pages/genre/index.vue"),
+			component: () => import("@src/features/shows/genre/page.vue"),
 			props: true,
 		},
 	],

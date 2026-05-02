@@ -33,12 +33,14 @@ export default defineConfig({
 			seed: [12_345],
 		}),
 		pluginClient({
-			output: { path: "clients/client.ts", barrelType: "named" },
+			output: { path: "clients", barrelType: "named" },
 			client: "fetch",
 			baseURL: TVMAZE_BASE,
+			group: { type: "tag" },
 		}),
 		pluginVueQuery({
-			output: { path: "hooks/vue-query.ts", barrelType: "named" },
+			output: { path: "hooks", barrelType: "named" },
+			group: { type: "tag" },
 			client: {
 				client: "fetch",
 				baseURL: TVMAZE_BASE,

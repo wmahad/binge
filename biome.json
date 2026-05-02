@@ -8,15 +8,18 @@
 	"files": {
 		"ignoreUnknown": false,
 		"includes": [
-			"./src/**/*.ts",
-			"./src/**/*.css",
+			"./src/**",
+			"!./src/generated",
 			"./index.html",
+			"./kubb.config.ts",
+			"./scripts/**/*.mjs",
 			"./vite.config.ts",
+			"./vite.shared.ts",
+			"./vitest.config.ts",
+			"./vitest.setup.ts",
 			"./tsconfig.json",
 			"./tsconfig.app.json",
 			"./tsconfig.node.json",
-			"./tsconfig.test.json",
-			"./test/**/*.ts",
 			"./package.json",
 			"./biome.json",
 			"./README.md"
@@ -52,5 +55,19 @@
 				"organizeImports": "on"
 			}
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["./src/generated/**"],
+			"linter": {
+				"enabled": false
+			},
+			"formatter": {
+				"enabled": false
+			},
+			"assist": {
+				"enabled": false
+			}
+		}
+	]
 }
