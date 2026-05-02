@@ -56,16 +56,18 @@ Use **pnpm only when you need to install or add packages**, not for every comman
 
 | Command | Description |
 | --- | --- |
-| `pnpm install` | Install deps |
-| `pnpm dev` | Dev server |
+| `pnpm install` | Install deps and run **`prepare`** ( **`pnpm generate`** + **`lefthook install`** ) |
+| `pnpm dev` | Vite dev server |
 | `pnpm build` | Typecheck + production bundle |
 | `pnpm preview` | Preview production build |
 | `pnpm test` | Vitest (unit + browser integration tests) |
 | `pnpm run test:install-browsers` | One-time Playwright browser binaries (needed for tests on a fresh machine) |
-| `pnpm typecheck` | Typecheck only |
+| `pnpm typecheck` | `vue-tsc` |
 | `pnpm check` | Biome lint + format |
 
-Regenerate API typings/clients/mocks from the OpenAPI spec: `pnpm generate` (after editing `openapi/`).
+**Generated code:** Kubb writes **`src/generated/`** from **`openapi/tvmaze.yaml`**. That folder is **not committed**. **`pnpm install`** runs **`pnpm generate`** via the **`prepare`** script so `src/generated/` exists before **`pnpm dev`**, **`pnpm build`**, or **`pnpm test`**.
+
+After editing **`openapi/`**, run **`pnpm generate`** again (or reinstall) so clients, types, mocks, and MSW handlers stay aligned.
 
 ---
 
@@ -91,9 +93,9 @@ It is **not** a contest for the longest `package.json`. The idea is to avoid man
 
 **Approach:** This project keeps its own spec in `openapi/tvmaze.yaml`. The public TVMaze docs describe behavior; that file is what **this codebase** compiles against.
 
-**Generated from the spec (via Kubb):** TypeScript types, fetch clients, TanStack Vue Query hooks, Faker-based fixtures, and MSW handlers for tests.
+**Generated from the spec (via Kubb):** TypeScript types, fetch clients, TanStack Vue Query hooks, Faker-based fixtures, and MSW handlers for tests, written to **`src/generated/`** (not committed; created by **`pnpm install`** via **`prepare`** / **`pnpm generate`**).
 
-**Workflow:** Change the spec → run `pnpm generate` → app code and mocks stay aligned.
+**Workflow:** Change the spec → run **`pnpm generate`** → app code and mocks stay aligned.
 
 **Cost:** The YAML must stay truthful to the live API. Small ongoing edits in return for one shared definition and fewer typos in paths and bodies.
 

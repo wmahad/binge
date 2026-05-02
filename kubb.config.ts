@@ -16,7 +16,8 @@ export default defineConfig({
 	output: {
 		path: "./src/generated",
 		clean: true,
-		format: "biome",
+		/** Biome excludes `./src/generated`; formatting would no-op or fail the hook. */
+		format: false,
 		lint: false,
 	},
 	hooks: {
