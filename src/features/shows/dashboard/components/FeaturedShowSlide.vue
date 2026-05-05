@@ -28,7 +28,7 @@ const showDetailPath = computed(() => `/shows/${props.show.id}`);
 
 <template>
 	<div
-		class="ui-absolute-fill transition-opacity duration-1000"
+		class=" ui-featured-slide-stack ui-absolute-fill transition-opacity duration-1000"
 		:class="
 			isCurrentSlide ? 'z-10 opacity-100' : 'pointer-events-none z-0 opacity-0'
 		"
@@ -42,11 +42,9 @@ const showDetailPath = computed(() => `/shows/${props.show.id}`);
 			:loading="isCurrentSlide ? 'eager' : 'lazy'"
 			:fetchpriority="isCurrentSlide ? 'high' : 'low'"
 			sizes="100vw"
-			class="ui-dashboard-featured-image"
+			class="ui-dashboard-featured-image z-0"
 			:class="isCurrentSlide ? 'scale-[1.03]' : 'scale-100'"
 		/>
-		<div class="ui-absolute-fill ui-overlay-gradient-fade" />
-		<div class="ui-overlay-hero-scrim" />
 
 		<div class="ui-hero-content-shell">
 			<div class="max-w-2xl">

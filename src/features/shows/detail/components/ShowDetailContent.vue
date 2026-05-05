@@ -60,7 +60,7 @@ function shareShow() {
 </script>
 
 <template>
-	<div>
+	<div class="pb-20">
 		<ShowDetailHero
 			:show="show"
 			:hero-image-url="heroImageUrl"
@@ -85,7 +85,5 @@ function shareShow() {
 		<ShowDetailCast :show-id="show.id" />
 
 		<ShowDetailSimilar :show="show" :show-id="show.id" />
-
-		<div class="h-20" />
 	</div>
 </template>

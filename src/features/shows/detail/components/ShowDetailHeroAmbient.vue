@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
 	<template v-if="heroImageUrl">
-		<div class="ui-absolute-fill -z-10 lg:hidden">
+		<div class="ui-detail-ambient-mobile">
 			<MediaCoverImage
 				:src="heroImageUrl"
 				alt=""
@@ -16,14 +16,12 @@ defineProps<{
 				loading="eager"
 				fetchpriority="high"
 				sizes="100vw"
-				class="object-[50%_18%]"
+				class="z-0 object-[50%_18%]"
 				aria-hidden="true"
 			/>
-			<div class="ui-absolute-fill ui-detail-ambient-mobile-top" />
-			<div class="ui-absolute-fill ui-detail-ambient-mobile-bottom" />
 		</div>
 
-		<div class="ui-absolute-fill -z-10 hidden lg:block">
+		<div class="ui-detail-ambient-desktop">
 			<MediaCoverImage
 				:src="heroImageUrl"
 				alt=""
@@ -31,10 +29,9 @@ defineProps<{
 				loading="lazy"
 				fetchpriority="low"
 				sizes="50vw"
-				class="scale-110 opacity-20 blur-2xl"
+				class="z-0 scale-110 opacity-20 blur-2xl"
 				aria-hidden="true"
 			/>
-			<div class="ui-absolute-fill bg-background/60" />
 		</div>
 	</template>
 </template>

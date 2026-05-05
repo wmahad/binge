@@ -448,11 +448,28 @@
 		@apply h-1.5 w-1.5 rounded-full bg-foreground/35 hover:bg-foreground/50;
 	}
 
-	.ui-overlay-gradient-fade {
+	.ui-dashboard-hero-shell[aria-busy="true"]::before {
+		content: "";
+		@apply absolute inset-0 z-0 animate-pulse rounded-none bg-card/40!;
+	}
+
+	.ui-dashboard-hero-shell[aria-busy="true"]::after {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-1 bg-linear-to-t from-background via-background/70 to-transparent md:bg-linear-to-r;
+	}
+
+	.ui-featured-slide-stack::before {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-1;
 		background: var(--gradient-fade);
 	}
-	.ui-overlay-hero-scrim {
-		@apply absolute inset-0 bg-linear-to-t from-background via-background/70 to-transparent md:bg-linear-to-r;
+
+	.ui-featured-slide-stack::after {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-2 bg-linear-to-t from-background via-background/70 to-transparent md:bg-linear-to-r;
 	}
 
 	.ui-scroll-rail-base {
@@ -546,11 +563,11 @@
 	.ui-skeleton-detail-cast-line-secondary {
 		@apply mx-auto h-3 w-1/2 animate-pulse rounded bg-muted;
 	}
-	.ui-skeleton-section-title {
-		@apply mb-6 h-7 w-40 animate-pulse rounded bg-muted;
-	}
 	.ui-skeleton-content-rail {
 		@apply flex gap-4 overflow-hidden pb-3;
+	}
+	.ui-skeleton-section-title {
+		@apply mb-6 h-7 w-40 animate-pulse rounded bg-muted;
 	}
 	.ui-skeleton-season-card-shell {
 		@apply w-56 shrink-0 overflow-hidden;
@@ -632,27 +649,64 @@
 	.ui-media-image-hover-poster {
 		@apply duration-500 group-hover:scale-[1.04];
 	}
-	.ui-show-card-overlay-reveal {
-		@apply pointer-events-none opacity-0 transition-opacity duration-300 group-hover:opacity-100;
+
+	/* md: z-0 so the hover title sibling can sit above (::after + transformed img). */
+	.ui-show-card-poster-overlay-host {
+		@apply md:z-0;
+	}
+
+	.ui-show-card-poster-overlay-host::after {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-1 opacity-0 transition-opacity duration-300;
+		background: var(--gradient-fade);
+	}
+
+	.ui-media-card-poster.group:hover .ui-show-card-poster-overlay-host::after {
+		@apply opacity-100;
 	}
 	.ui-show-card-rating-badge {
 		@apply absolute right-2 top-2 z-10 flex items-center gap-1 rounded-full bg-background/80 px-2 py-1 text-xs font-semibold backdrop-blur;
 	}
 	.ui-show-card-content-reveal {
-		@apply p-2 md:absolute md:bottom-0 md:left-0 md:right-0 md:p-3 md:translate-y-2 md:opacity-0 md:transition-[opacity,transform] md:duration-300 md:group-hover:translate-y-0 md:group-hover:opacity-100;
+		@apply p-2 md:absolute md:bottom-0 md:left-0 md:right-0 md:z-10 md:p-3 md:pt-10 md:bg-linear-to-t md:from-black/85 md:via-black/55 md:to-transparent md:translate-y-2 md:opacity-0 md:transition-[opacity,transform] md:duration-300 md:group-hover:translate-y-0 md:group-hover:opacity-100;
+	}
+	.ui-show-card-title {
+		@apply text-sm text-foreground font-medium font-sans md:text-base md:text-white md:leading-tight;
+		text-shadow: 0 2px 8px rgb(0 0 0 / 0.8);
+	}
+	.ui-show-card-meta {
+		@apply text-muted-foreground md:text-white/90;
+		text-shadow: 0 1px 6px rgb(0 0 0 / 0.75);
 	}
 	.ui-media-portrait-image {
 		@apply absolute inset-0 h-full w-full object-cover object-[50%_22%];
 	}
 
-	.ui-detail-ambient-mobile-top {
-		@apply bg-linear-to-b from-background/30 via-background/70 to-background;
+	.ui-detail-ambient-mobile {
+		@apply absolute inset-0 -z-10 lg:hidden;
 	}
-	.ui-detail-ambient-mobile-bottom {
-		@apply bg-linear-to-t from-background via-background/40 to-transparent;
+
+	.ui-detail-ambient-mobile::before {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-1 bg-linear-to-b from-background/30 via-background/70 to-background;
 	}
-	.ui-detail-sidepanel-left-fade {
-		@apply pointer-events-none absolute inset-y-0 left-0 w-40 bg-linear-to-r from-background via-background/70 to-transparent;
+
+	.ui-detail-ambient-mobile::after {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-2 bg-linear-to-t from-background via-background/40 to-transparent;
+	}
+
+	.ui-detail-ambient-desktop {
+		@apply absolute inset-0 -z-10 hidden lg:block;
+	}
+
+	.ui-detail-ambient-desktop::after {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-1 bg-background/60;
 	}
 	.ui-detail-hero-grid {
 		@apply grid min-h-[80vh] gap-0 lg:min-h-[80vh] lg:grid-cols-[1.1fr_1fr];
@@ -666,6 +720,12 @@
 	.ui-detail-hero-sidepanel-shell {
 		@apply relative hidden min-h-0 lg:block lg:min-h-[80vh];
 	}
+
+	.ui-detail-hero-sidepanel-shell:has(img)::after {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-y-0 left-0 z-1 w-40 bg-linear-to-r from-background via-background/70 to-transparent;
+	}
 	.ui-detail-hero-actions-grid {
 		@apply mb-8 grid max-w-lg grid-cols-2 gap-3;
 	}
@@ -675,14 +735,16 @@
 	.ui-detail-hero-fact-item {
 		@apply flex items-center gap-1.5;
 	}
-	.ui-season-poster-overlay {
-		@apply pointer-events-none bg-linear-to-t from-background/90 to-transparent;
-	}
 	.ui-season-card-shell {
 		@apply w-56 shrink-0 overflow-hidden hover:border-primary/40;
 	}
 	.ui-season-card-poster-frame {
 		@apply relative aspect-16/10 overflow-hidden bg-muted;
+	}
+	.ui-season-card-poster-frame::after {
+		content: "";
+		pointer-events: none;
+		@apply absolute inset-0 z-1 bg-linear-to-t from-background/90 to-transparent;
 	}
 	.ui-season-card-overlay-content {
 		@apply absolute bottom-2 left-3 right-3 z-10;

@@ -10,12 +10,13 @@ const MEDIA_FRAME_CLASS = {
 const props = withDefaults(
 	defineProps<{
 		variant?: "poster" | "listPoster";
+    class?: string;
 	}>(),
 	{ variant: "poster" },
 );
 
 const frameClass = computed(
-	() => `${BASE_CLASS} ${MEDIA_FRAME_CLASS[props.variant]}`,
+	() => [BASE_CLASS, MEDIA_FRAME_CLASS[props.variant], props.class].filter(Boolean).join(" "),
 );
 </script>
 

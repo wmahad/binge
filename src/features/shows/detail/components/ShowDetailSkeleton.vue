@@ -14,7 +14,7 @@ const SKELETON_HERO_SUMMARY_CLASSES = [
 </script>
 
 <template>
-	<div>
+	<div class="pb-20">
 		<section class="relative overflow-hidden">
 			<div class="ui-detail-hero-grid">
 				<div class="ui-detail-skeleton-hero-content-column">
@@ -54,6 +54,5 @@ const SKELETON_HERO_SUMMARY_CLASSES = [
 				</div>
 			</div>
 		</section>
-		<div class="h-20" />
 	</div>
 </template>

@@ -42,7 +42,7 @@ function prefetchPoster() {
 				: 'ui-poster-rail-item'
 		"
 	>
-		<AppMediaFrame variant="poster">
+		<AppMediaFrame variant="poster" class="ui-show-card-poster-overlay-host">
 			<MediaCoverImage
 				v-if="posterSrc"
 				:src="posterSrc"
@@ -58,9 +58,6 @@ function prefetchPoster() {
 				{{ show.name }}
 			</div>
 			<div
-				class="ui-absolute-fill ui-overlay-gradient-fade ui-show-card-overlay-reveal"
-			/>
-			<div
 				v-if="displayMeta.hasRatingAverage"
 				class="ui-show-card-rating-badge"
 			>
@@ -74,11 +71,11 @@ function prefetchPoster() {
 			<AppHeading
 				variant="posterTitle"
 				:level="3"
-				class="mb-0 line-clamp-2 text-foreground"
+				class="ui-show-card-title mb-0 line-clamp-2"
 			>
 				{{ show.name }}
 			</AppHeading>
-			<AppText variant="mutedXs" class="mt-1 hidden line-clamp-1 md:block">
+			<AppText variant="mutedXs" class="ui-show-card-meta mt-1 hidden line-clamp-1 md:block">
 				{{ displayMeta.genresLabel }}
 			</AppText>
 		</div>

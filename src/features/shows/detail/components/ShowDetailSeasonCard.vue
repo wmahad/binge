@@ -43,9 +43,8 @@ const hasAirYearRange = computed(() => !isNullish(airYearRangeLabel.value));
 				:src="posterSrc ?? ''"
 				:alt="seasonPosterAlt"
 				sizes="min(18rem, 42vw)"
-				:class="['object-[center_top]', posterOpacityClass]"
+				:class="['z-0 object-[center_top]', posterOpacityClass]"
 			/>
-			<div class="ui-absolute-fill ui-season-poster-overlay" />
 			<div class="ui-season-card-overlay-content">
 				<AppText variant="eyebrow" class="ui-season-card-kicker block">
 					Season

@@ -53,7 +53,7 @@ const emit = defineEmits<{
 						loading="eager"
 						fetchpriority="high"
 						sizes="(min-width: 1024px) 45vw, 100vw"
-						class="object-[50%_30%]"
+						class="z-0 object-[50%_30%]"
 					/>
 					<div class="ui-detail-sidepanel-left-fade" />
 				</template>
