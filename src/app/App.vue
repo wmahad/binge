@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { AppHeader } from "@src/components";
+import { Analytics } from "@vercel/analytics/vue";
 import { RouterView } from "vue-router";
 </script>
 
@@ -9,5 +10,6 @@ import { RouterView } from "vue-router";
 		<main id="main" class="flex-1 min-h-0">
 			<RouterView />
 		</main>
+		<Analytics />
 	</div>
 </template>
