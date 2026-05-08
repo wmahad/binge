@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import type { CastMember } from "@generated";
+import { type CastMember, useGetShowCast } from "@generated";
 import {
 	AppText,
 	PersonPortrait,
 	ScrollableRow,
 	SectionTitleRow,
 } from "@src/components";
-import { useShowCast } from "@src/composables";
 import { preferredImageUrl } from "@src/features/shows/detail/utils/mediaUrls";
 import { prefetchImageUrl } from "@src/utils";
 import { computed, toValue, watch } from "vue";
@@ -15,7 +14,7 @@ const props = defineProps<{
 	showId: number;
 }>();
 
-const castQuery = useShowCast(computed(() => props.showId));
+const castQuery = useGetShowCast(() => props.showId);
 
 const cast = computed<CastMember[]>(() => castQuery.data.value ?? []);
 const showLoadingState = computed(

@@ -1,27 +1,23 @@
 <script setup lang="ts">
 import type { Show } from "@generated";
 import { ScrollableRow, SectionTitleRow, ShowCard } from "@src/components";
-import { useShowCast, useShowSimilarContent } from "@src/composables";
+import { useShowSimilarContent } from "@src/composables";
 import { prefetchImageUrl, showPosterSrc } from "@src/utils";
-import { computed, toValue, watch } from "vue";
+import { computed, watch } from "vue";
 
 const props = defineProps<{
 	show: Show;
 	showId: number;
 }>();
 
-const castQuery = useShowCast(computed(() => props.showId));
 const similarQuery = useShowSimilarContent(
-	computed(() => props.showId),
-	computed(() => props.show),
-	computed(() => castQuery.data.value),
+	() => props.showId,
+	() => props.show,
 );
 const similar = computed(() => similarQuery.data.value?.similar ?? []);
 const hasSimilar = computed(() => similar.value.length > 0);
 const showLoadingState = computed(
-	() =>
-		(toValue(castQuery.isPending) || toValue(similarQuery.isPending)) &&
-		!hasSimilar.value,
+	() => similarQuery.isPending.value && !hasSimilar.value,
 );
 
 const blurb = computed(
@@ -33,10 +29,7 @@ const MAX_SIMILAR_POSTER_PREFETCH = 12;
 watch(
 	similar,
 	(similarShows) => {
-		for (const show of similarShows.slice(
-			0,
-			MAX_SIMILAR_POSTER_PREFETCH,
-		)) {
+		for (const show of similarShows.slice(0, MAX_SIMILAR_POSTER_PREFETCH)) {
 			prefetchImageUrl(showPosterSrc(show));
 		}
 	},

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { getShowCrew } from "@generated";
+import { useGetShowCrew } from "@generated";
 import { AppSurface, AppText, PersonPortrait, SectionTitleRow } from "@src/components";
 import { preferredImageUrl } from "@src/features/shows/detail/utils/mediaUrls";
 import { pickCreators } from "@src/features/shows/detail/utils/pickCreators";
 import { initialsFromName } from "@src/utils";
-import { useQuery } from "@tanstack/vue-query";
 import { computed } from "vue";
 
 const props = defineProps<{
@@ -12,16 +11,7 @@ const props = defineProps<{
 	showId: number;
 }>();
 
-const crewQuery = useQuery({
-	queryKey: computed(() => ["show-crew", props.showId] as const),
-	queryFn: async () => {
-		try {
-			return (await getShowCrew(props.showId)) ?? [];
-		} catch {
-			return [];
-		}
-	},
-});
+const crewQuery = useGetShowCrew(() => props.showId);
 
 const creators = computed(() => pickCreators(crewQuery.data.value ?? []));
 </script>

@@ -1,24 +1,15 @@
-import { getShows, getShowsQueryKey } from "@generated";
+import { getShowsQueryOptions } from "@generated";
 import { useQueries } from "@tanstack/vue-query";
 import { computed } from "vue";
-
-export type ShowsCatalogQueriesOptions = {
-	retry?: boolean | number;
-};
 
 /**
  * Fetch multiple catalog pages (same endpoint) and merge results for genre grids,
  * dashboard hero carousel, etc.
  */
-export function useShowsCatalogQueries(
-	pages: number[],
-	options?: ShowsCatalogQueriesOptions,
-) {
+export function useShowsCatalogQueries(pages: number[]) {
 	const results = useQueries({
 		queries: pages.map((page) => ({
-			queryKey: getShowsQueryKey({ page }),
-			queryFn: () => getShows({ page }),
-			...(options?.retry !== undefined ? { retry: options.retry } : {}),
+			...getShowsQueryOptions({ page }),
 		})),
 	});
 

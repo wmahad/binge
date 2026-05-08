@@ -43,10 +43,7 @@ const pageNum = computed(() => parsePositiveNumber(route.query.page));
 
 const genreParam = computed(() => String(route.params.genre ?? ""));
 
-const { loading, mergedShows: allShows } = useShowsCatalogQueries(
-	[0, 1, 2, 3],
-	{ retry: false },
-);
+const { loading, mergedShows: allShows } = useShowsCatalogQueries([0, 1, 2, 3]);
 
 const filtered = computed(() =>
 	filterSortShowsByGenre(allShows.value, genreDecoded.value, sort.value),

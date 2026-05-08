@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getShowSeasons, type Season, type Show } from "@generated";
+import { type Season, type Show, useGetShowSeasons } from "@generated";
 import { preferredImageUrl } from "@src/features/shows/detail/utils/mediaUrls";
 import {
 	totalEpisodesFromSeasons,
@@ -8,7 +8,6 @@ import {
 	ratingToFilledStarCount,
 	showSummaryPlain,
 } from "@src/features/shows/detail/utils/showFormatting";
-import { useQuery } from "@tanstack/vue-query";
 import { computed } from "vue";
 
 import ShowDetailCast from "./ShowDetailCast.vue";
@@ -21,16 +20,7 @@ const props = defineProps<{
 	show: Show;
 }>();
 
-const seasonsQuery = useQuery({
-	queryKey: computed(() => ["show-seasons", props.show.id] as const),
-	queryFn: async () => {
-		try {
-			return (await getShowSeasons(props.show.id)) ?? [];
-		} catch {
-			return [];
-		}
-	},
-});
+const seasonsQuery = useGetShowSeasons(() => props.show.id);
 
 const seasons = computed<Season[]>(() => seasonsQuery.data.value ?? []);
 const seasonsPending = computed(() => seasonsQuery.isPending.value);

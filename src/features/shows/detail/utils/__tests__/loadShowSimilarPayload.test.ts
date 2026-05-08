@@ -114,42 +114,4 @@ describe("loadShowSimilarPayload", () => {
 
 		expect(out.similar.map((show) => show.id)).toEqual([2, 3, 4, 5]);
 	});
-
-	it("uses preloaded cast without requesting show cast", async () => {
-		const target = showJson(1, 7, ["Drama"]);
-		const preloaded = [castRow(100), castRow(101), castRow(102)];
-		mswWorker.use(
-			getShowCastHandler(() => {
-				throw new Error("getShowCast should not run when cast is preloaded");
-			}),
-			getPersonCastcreditsHandler((info) => {
-				const id = String(info.params.id);
-				if (id === "100")
-					return getPersonCastcreditsHandlerResponse200([
-						{ _embedded: { show: showJson(2, 9) } },
-						{ _embedded: { show: showJson(3, 8) } },
-					]);
-				if (id === "101")
-					return getPersonCastcreditsHandlerResponse200([
-						{ _embedded: { show: showJson(3, 8) } },
-						{ _embedded: { show: showJson(4, 7) } },
-					]);
-				if (id === "102")
-					return getPersonCastcreditsHandlerResponse200([
-						{ _embedded: { show: showJson(5, 6) } },
-					]);
-				return getPersonCastcreditsHandlerResponse200([]);
-			}),
-			getShowsHandler(() => {
-				throw new Error("getShows should not run when cast overlap is enough");
-			}),
-		);
-
-		const out = await loadShowSimilarPayload(target, preloaded);
-
-		expect(out.cast.map((member) => member.person.id)).toEqual([100, 101, 102]);
-		expect(new Set(out.similar.map((show) => show.id))).toEqual(
-			new Set([2, 3, 4, 5]),
-		);
-	});
 });
