@@ -28,6 +28,7 @@ const PLACEHOLDER_ROUTES: RouteRecordRaw[] = [
 	{ path: "/genres/:genre", component: { template: "<div />" } },
 	{ path: "/shows/:id", component: { template: "<div />" } },
 	{ path: "/search", component: { template: "<div />" } },
+	{ path: "/:pathMatch(.*)*", component: { template: "<div />" } },
 ];
 
 export function createPlaceholderMemoryRouter(

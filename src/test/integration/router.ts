@@ -1,3 +1,4 @@
+import NotFoundPage from "@src/app/NotFoundPage.vue";
 import DashboardPage from "@src/features/shows/dashboard/page.vue";
 import DetailPage from "@src/features/shows/detail/page.vue";
 import GenrePage from "@src/features/shows/genre/page.vue";
@@ -58,6 +59,7 @@ export function createIntegrationRouter(
 			{ path: "/genres/:genre", component: genreExplore, props: true },
 			{ path: "/shows/:id", component: showDetail, props: true },
 			{ path: "/search", component: search },
+			{ path: "/:pathMatch(.*)*", component: NotFoundPage },
 		],
 	});
 }

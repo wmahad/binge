@@ -16,10 +16,6 @@ defineProps<{
 	totalEpisodes: number;
 	seasons: Season[];
 }>();
-
-const emit = defineEmits<{
-	share: [];
-}>();
 </script>
 
 <template>
@@ -35,7 +31,7 @@ const emit = defineEmits<{
 					:filled-star-count="filledStarCount"
 				/>
 
-				<ShowDetailHeroActions :show="show" @share="emit('share')" />
+				<ShowDetailHeroActions :show="show" />
 
 				<ShowDetailHeroFacts
 					:show="show"

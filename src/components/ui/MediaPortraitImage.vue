@@ -17,13 +17,13 @@ withDefaults(
 
 <template>
 	<img
-		:src="src"
-		:alt="alt"
+		:src
+		:alt
+		:sizes
+    :loading
+		:decoding
+		:fetchpriority
 		class="ui-media-portrait-image ui-non-interactive-image"
 		draggable="false"
-		:loading="loading"
-		:decoding="decoding"
-		:fetchpriority="fetchpriority"
-		:sizes="sizes"
 	/>
 </template>

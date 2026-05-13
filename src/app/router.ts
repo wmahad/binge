@@ -25,5 +25,10 @@ export const router = createRouter({
 			component: () => import("@src/features/shows/genre/page.vue"),
 			props: true,
 		},
+		{
+			path: "/:pathMatch(.*)*",
+			name: "not-found",
+			component: () => import("@src/app/NotFoundPage.vue"),
+		},
 	],
 });

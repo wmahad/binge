@@ -37,16 +37,6 @@ const totalEpisodes = computed(() =>
 const heroImageUrl = computed(() => preferredImageUrl(props.show.image));
 
 const summaryPlain = computed(() => showSummaryPlain(props.show.summary));
-
-function shareShow() {
-	const title = props.show.name;
-	const url = typeof window !== "undefined" ? window.location.href : "";
-	if (navigator.share) {
-		void navigator.share({ title, url }).catch(() => {});
-	} else {
-		void navigator.clipboard?.writeText(url);
-	}
-}
 </script>
 
 <template>
@@ -59,7 +49,6 @@ function shareShow() {
 			:filled-star-count="filledStarCount"
 			:total-episodes="totalEpisodes"
 			:seasons="seasons"
-			@share="shareShow"
 		/>
 
 		<ShowDetailSeasons

@@ -24,12 +24,10 @@ const blurb = computed(
 	() => `Shows sharing cast & genres with ${props.show.name}`,
 );
 
-const MAX_SIMILAR_POSTER_PREFETCH = 12;
-
 watch(
 	similar,
 	(similarShows) => {
-		for (const show of similarShows.slice(0, MAX_SIMILAR_POSTER_PREFETCH)) {
+		for (const show of similarShows) {
 			prefetchImageUrl(showPosterSrc(show));
 		}
 	},

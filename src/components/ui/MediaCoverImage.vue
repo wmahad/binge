@@ -28,13 +28,13 @@ const layoutClass = computed(() =>
 
 <template>
 	<img
-		:src="src"
-		:alt="alt"
-		:class="[layoutClass, 'ui-non-interactive-image']"
+		:src
+		:alt
+		:sizes
+		:loading
+		:decoding
+		:fetchpriority
 		draggable="false"
-		:loading="loading"
-		:decoding="decoding"
-		:fetchpriority="fetchpriority"
-		:sizes="sizes"
+		:class="[layoutClass, 'ui-non-interactive-image']"
 	/>
 </template>

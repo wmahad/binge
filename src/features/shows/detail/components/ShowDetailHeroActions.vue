@@ -11,14 +11,20 @@ const props = defineProps<{
 	show: Show;
 }>();
 
-const emit = defineEmits<{
-	share: [];
-}>();
-
 const actions = computed(() => buildShowHeroActionItems(props.show));
 
+function shareShow() {
+	const title = props.show.name;
+	const url = typeof window !== "undefined" ? window.location.href : "";
+	if (navigator.share) {
+		void navigator.share({ title, url }).catch(() => {});
+	} else {
+		void navigator.clipboard?.writeText(url);
+	}
+}
+
 function onTileClick(action: ShowHeroActionItem) {
-	if (action.isShare) emit("share");
+	if (action.isShare) shareShow();
 }
 </script>
 

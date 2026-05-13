@@ -62,7 +62,7 @@ async function collectCastOverlapSimilarShows(
 ): Promise<Show[]> {
 	const overlapCounts = new Map<number, { show: Show; count: number }>();
 
-	for (const member of cast.slice(0, TOP_CAST_COUNT)) {
+	for (const member of cast) {
 		try {
 			const credits = await getPersonCastcredits(member.person.id, EMBED_SHOW);
 			for (const credit of credits) {
