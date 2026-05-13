@@ -1,9 +1,8 @@
 <script setup lang="ts">
 
 import { AppIconButton, SiteSearchInput } from "@src/components";
-import { isUndefined } from "@src/utils";
 import { Search, Tv, X } from "lucide-vue-next";
-import { nextTick, onUnmounted, ref, watch } from "vue";
+import { onUnmounted, ref, watch } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import ThemeToggle from "./ThemeToggle.vue";
@@ -11,34 +10,44 @@ import ThemeToggle from "./ThemeToggle.vue";
 const router = useRouter();
 const route = useRoute();
 
+const SEARCH_ROUTE = "/search";
+const HOME_ROUTE = "/";
+
 const searchQuery = ref("");
 const isMobileSearchOpen = ref(false);
 
-/** True while `searchQuery` is being set from the URL so we don't loop back into debounced navigation */
-let syncingFromRoute = false;
-
-/** How long to wait after typing stops before updating the URL / triggering search (ms) */
 const SEARCH_DEBOUNCE_MS = 750;
-
 let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
+function queryFromRoute(): string {
+	return String(route.query.q ?? "").trim();
+}
+
+function isOnSearchPage(): boolean {
+	return route.path === SEARCH_ROUTE;
+}
+
+function navigateToSearch(q: string) {
+	const to = { path: SEARCH_ROUTE, query: { q } };
+	isOnSearchPage() ? router.replace(to) : router.push(to);
+}
+
+function routeAlreadyMatchesInput(): boolean {
+	if (!isOnSearchPage()) return !searchQuery.value;
+	return queryFromRoute() === searchQuery.value;
+}
+
 function applySearchRoute() {
-	const trimmed = searchQuery.value.trim();
-	if (!trimmed) {
-		if (route.path === "/search") {
-			void router.replace({ path: "/" });
-		}
+	if (!searchQuery.value) {
+		if (isOnSearchPage()) router.replace({ path: HOME_ROUTE });
 		return;
 	}
-	if (route.path === "/search") {
-		void router.replace({ path: "/search", query: { q: trimmed } });
-	} else {
-		void router.push({ path: "/search", query: { q: trimmed } });
-	}
+	if (isOnSearchPage() && queryFromRoute() === searchQuery.value) return;
+	navigateToSearch(searchQuery.value);
 }
 
 function scheduleDebouncedSearch() {
-	if (!isUndefined(debounceTimer)) clearTimeout(debounceTimer);
+	if (debounceTimer != null) clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(() => {
 		debounceTimer = undefined;
 		applySearchRoute();
@@ -46,43 +55,29 @@ function scheduleDebouncedSearch() {
 }
 
 function cancelDebouncedSearch() {
-	if (!isUndefined(debounceTimer)) {
+	if (debounceTimer != null) {
 		clearTimeout(debounceTimer);
 		debounceTimer = undefined;
 	}
 }
 
-function syncSearchQueryFromRoute(nextValue: string) {
-	syncingFromRoute = true;
-	searchQuery.value = nextValue;
-	void nextTick(() => {
-		syncingFromRoute = false;
-	});
-}
-
-onUnmounted(() => {
-	cancelDebouncedSearch();
-});
+onUnmounted(cancelDebouncedSearch);
 
 watch(
 	() => [route.path, route.query.q] as const,
 	() => {
-		if (route.path !== "/search") {
-			if (searchQuery.value !== "") {
-				syncSearchQueryFromRoute("");
-			}
+		if (!isOnSearchPage()) {
+			if (searchQuery.value !== "") searchQuery.value = "";
 			return;
 		}
-		const fromRoute = String(route.query.q ?? "");
-		if (fromRoute !== searchQuery.value) {
-			syncSearchQueryFromRoute(fromRoute);
-		}
+		const fromRoute = queryFromRoute();
+		if (fromRoute !== searchQuery.value) searchQuery.value = fromRoute;
 	},
 	{ immediate: true },
 );
 
 watch(searchQuery, () => {
-	if (syncingFromRoute) return;
+	if (routeAlreadyMatchesInput()) return;
 	scheduleDebouncedSearch();
 });
 

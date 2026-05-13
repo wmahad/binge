@@ -27,7 +27,7 @@ function onSubmit(event: SubmitEvent) {
 			aria-hidden="true"
 		/>
 		<input
-			v-model="searchQuery"
+			v-model.trim="searchQuery"
 			type="search"
 			:placeholder="`${SEARCH_LABEL}…`"
 			:aria-label="SEARCH_LABEL"
